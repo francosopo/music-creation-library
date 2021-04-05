@@ -46,4 +46,6 @@ j = Instrument(melody, quarter_note_duration=1000)
 i.build_melody("my_slow_melody")
 ```
 
+For more info, see the example.py file
+
 Enjoy.
