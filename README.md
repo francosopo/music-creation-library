@@ -36,4 +36,13 @@ Once you have created your instrument with the melody you want to
 play, build the melody and give it a name. Then, you can listen the
 .wav.
 
+```python
+i = Instrument(melody) #the melody object
+i.build_melody("my_melody")
+
+#or
+j = Instrument(melody, quarter_note_duration=1000)
+i.build_melody("my_slow_melody")
+```
+
 Enjoy.
