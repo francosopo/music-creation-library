@@ -2,6 +2,7 @@
 ```shell
 git clone https://github.com/francosopo/music-creation-library.git
 ```
+Or download the zip
 
 # USAGE
 For basic usage, instantiate the Traditional Scale (Do menor relative) with the
