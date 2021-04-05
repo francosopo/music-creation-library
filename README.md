@@ -24,7 +24,7 @@ parameters. Also, you can specify the quarter note duration in miliseconds when 
 class Instrument(AbstractInstrument):
 
     def __init__(self, melody, **kwargs):
-        super().__init__(melody, kwargs)
+        super().__init__(melody, **kwargs)
 
     def timbre(self, note, armonic_number, time):
         return math.sin(2 * math.pi * note * armonic_number * time)
