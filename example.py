@@ -11,11 +11,11 @@ from melody import Melody
 
 class Instrument(AbstractInstrument):
 
-    def __init__(self, melody):
-        super().__init__(melody)
+    def __init__(self, melody, **kwargs):
+        super().__init__(melody, **kwargs)
 
-    def timbre(self, note, armonic_number, time_frame):
-        return math.sin(2 * math.pi * note * armonic_number * time_frame)
+    def timbre(self, note, armonic_number, time):
+        return math.sin(2 * math.pi * note * armonic_number * time)
 
 scale = TraditionalScale(12)
 melody = Melody(scale)
@@ -26,3 +26,6 @@ for i in range(12):
 
 i = Instrument(melody)
 i.build_melody("melodia2")
+
+j = Instrument(melody, quarter_note_duration=1000)
+i.build_melody("melodia3")

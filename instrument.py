@@ -5,11 +5,14 @@ import struct
 
 class AbstractInstrument(object):
 
-    def __init__(self, melody):
+    def __init__(self, melody, **kwargs):
         self.melody = melody.get_melody()
         self.scale = melody.get_scale()
         self.sample_rate = 44100
-        self.black_duration = 500
+        if(kwargs.get("quarter_note_duration")):
+            self.black_duration = kwargs.get("quarter_note_duration")
+        else:
+            self.black_duration = 500
         self.__compiled_melody = []
 
     @abc.abstractmethod
@@ -42,6 +45,14 @@ class AbstractInstrument(object):
             wav_file.writeframes(struct.pack('h', int(sample * 16382)))
         wav_file.close()
 
+
+class BasicInstrument(AbstractInstrument):
+
+    def __init__(self,melody):
+        super().__init__(melody)
+    
+    def timbre(self, note, armonic, time):
+        return math.sin(2 * math.pi * note * armonic * time )
 
 class Player(object):
     @staticmethod
