@@ -54,6 +54,8 @@ class BasicInstrument(AbstractInstrument):
     def timbre(self, note, armonic, time):
         return math.sin(2 * math.pi * note * armonic * time )
 
+
+
 class Player(object):
     @staticmethod
     def play(name):
