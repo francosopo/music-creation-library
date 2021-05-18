@@ -47,10 +47,12 @@ class Regression(object):
         f.close()
 
     def load_csv(self, name):
-        f = open(f"{name}.csv", "r")
+        f = open(f"{name}.csv", "r",encoding="utf-8")
         line = f.readline()
         while line != "":
+            line = line.replace("\\n","")
             data = line.split(",")
+            print(data)
             self.X_points.append(data[0])
             self.Y_points.append(data[1])
             line = f.readline()
@@ -61,7 +63,7 @@ class Regression(object):
         self.pipeline = make_pipeline(PolynomialFeatures(self.degree), LinearRegression())
         self.pipeline.fit(self.X_points.reshape(-1,1), self.Y_points.reshape(-1,1))
         
-    def use(self, x, truc_decimal=2):
+    def use(self, x, trunc_decimal=2):
         return truncate(self.pipeline.predict(np.array([[x-floor(x)]]))[0][0], trunc_decimal)
 
     def generate_randomly(self, seed=time(), num_max_points = 8):

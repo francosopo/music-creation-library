@@ -1,3 +1,6 @@
+# MUSIC CREATION LIBRARY
+This library is for creating custom musical scales and melodies so far.
+In the next versions, we are planning to add features for creating armonies.
 # INSTALL
 ```shell
 git clone https://github.com/francosopo/music-creation-library.git
