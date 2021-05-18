@@ -1,5 +1,6 @@
 import random as rnd
 import numpy as np 
+import pathlib, os
 
 from math import floor, pi, trunc
 from time import time
@@ -41,7 +42,12 @@ class Regression(object):
         self.Y_points = np.array(self.Y_points)
     
     def save_csv(self, name):
-        f = open(f"{name}.csv", "w")
+        root_directory = pathlib.Path(__file__).parent.parent.absolute()
+        data_directory
+        if not os.path.exists(os.path.join(root_directory,"timbres_data")):
+            os.mkdir
+        filename = os.path.join(root_directory, f"{name}.csv")
+        f = open(filename, "w")
         for i in range(len(self.X_points)):
             f.write(f"{self.X_points[i]}, {self.Y_points[i]}\n")
         f.close()

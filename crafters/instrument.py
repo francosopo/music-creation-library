@@ -2,6 +2,8 @@ import math
 import abc
 import wave
 import struct
+import pathlib
+import os
 
 class AbstractInstrument(object):
 
@@ -9,12 +11,18 @@ class AbstractInstrument(object):
         self.melody = melody.get_melody()
         self.scale = melody.get_scale()
         self.sample_rate = 44100
+        self.rendering_folder = ""
         if(kwargs.get("quarter_note_duration")):
             self.black_duration = kwargs.get("quarter_note_duration")
         else:
             self.black_duration = 500
         self.__compiled_melody = []
 
+    def set_render_directory(self, dir):
+        self.rendering_folder = dir
+        if not os.path.exists(self.rendering_folder):
+            os.mkdir(self.rendering_folder)
+    
     @abc.abstractmethod
     def timbre(self, note, armonic_number, time_frame):
         pass
@@ -34,7 +42,8 @@ class AbstractInstrument(object):
         self.build_wav(name)
     
     def build_wav(self, name):
-        wav_file = wave.open(f"{name}.wav", "w")
+        filename = os.path.join(self.rendering_folder, f"{name}.wav")
+        wav_file = wave.open(filename, "w")
         n_channels = 1
         sampwidth = 2
         n_frames = len(self.__compiled_melody)

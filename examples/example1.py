@@ -1,9 +1,9 @@
-from regression import Regression
-import math
-from scale import TraditionalScale
-from instrument import AbstractInstrument
-from melody import Melody
+from crafters.regression import Regression
+from crafters.scale import TraditionalScale
+from crafters.instrument import AbstractInstrument
+from crafters.melody import Melody
 
+import pathlib, os, math
 
 # Start creating a scale class
 # Then, create a melody class using the scale you created
@@ -25,26 +25,16 @@ melody = Melody(scale)
 
 #create the melody
 for i in range(12):
-    melody.use_note(i,2)
+    melody.use_note(i,2) #(note index , duration)
 
-#i = Instrument(melody)
-#i.build_melody("melodia2")
+i = Instrument(melody)
+root_directory = pathlib.Path(__file__).parent.parent.absolute()
+render_directory = os.path.join(root_directory, "creations")
 
-"""class Instrument2(AbstractInstrument):
+i.set_render_directory(render_directory)
+i.build_melody("melodia1")
 
-    def __init__(self, melody, **kwargs):
-        super().__init__(melody, **kwargs)
-        self.regression = Regression(degree=6)
-        self.regression.generate_randomly(num_max_points=10)
-        self.regression.save_csv("first_timbre")
-
-    def timbre(self, note, armonic_number,time):
-        return self.regression.use(2 * math.pi * note * armonic_number * time)
-"""
-#j = Instrument2(melody, quarter_note_duration=250)
-#j.build_melody("melodia3")
-
-class Instrument3(AbstractInstrument):
+"""class Instrument3(AbstractInstrument):
 
     def __init__(self, melody, **kwargs):
         super().__init__(melody,**kwargs)
@@ -57,3 +47,4 @@ class Instrument3(AbstractInstrument):
 
 k = Instrument3(melody)
 k.build_melody("melodia3")
+"""
