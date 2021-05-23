@@ -20,10 +20,6 @@ class Instrument(AbstractInstrument):
 scale = TraditionalScale(12)
 melody = Melody(scale)
 
-#create the melody
-
-
-
 
 class TestBasicTest(testing.TestCase):
 
