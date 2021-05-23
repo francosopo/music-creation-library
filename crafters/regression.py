@@ -1,6 +1,6 @@
 import random as rnd
 import numpy as np 
-import pathlib, os
+import pathlib, os, csv
 
 from math import floor, pi, trunc
 from time import time
@@ -42,18 +42,32 @@ class Regression(object):
         self.Y_points = np.array(self.Y_points)
     
     def save_csv(self, name):
-        root_directory = pathlib.Path(__file__).parent.parent.absolute()
-        data_directory
-        if not os.path.exists(os.path.join(root_directory,"timbres_data")):
-            os.mkdir
-        filename = os.path.join(root_directory, f"{name}.csv")
+        if not os.path.exists(os.path.join(self.csv_dir)):
+            os.mkdir(os.path.join(self.csv_dir))
+        filename = os.path.join(self.csv_dir, f"{name}.csv")
         f = open(filename, "w")
         for i in range(len(self.X_points)):
             f.write(f"{self.X_points[i]}, {self.Y_points[i]}\n")
         f.close()
 
-    def load_csv(self, name):
-        f = open(f"{name}.csv", "r",encoding="utf-8")
+    def load_csv(self, name, column_names=False):
+        with open(os.path.join(self.csv_dir, f"{name}.csv"), 'r') as csv_file:
+            csv_reader = csv.reader(csv_file,delimiter=',')
+            if column_names:
+                line_count=0
+            else:
+                line_count=1
+            for row in csv_reader:
+                if line_count == 0:
+                    line_count += 1
+                else:
+                    self.X_points.append(float(row[0]))
+                    self.Y_points.append(float(row[1]))
+        self.X_points = np.array(self.X_points)
+        self.Y_points = np.array(self.Y_points)
+
+        """dir = os.path.join(self.csv_dir,name)
+        f = open(f"{dir}.csv", "r",encoding="utf-8")
         line = f.readline()
         while line != "":
             line = line.replace("\\n","")
@@ -63,7 +77,7 @@ class Regression(object):
             self.Y_points.append(data[1])
             line = f.readline()
         self.X_points = np.array(self.X_points)
-        self.Y_points = np.array(self.Y_points)
+        self.Y_points = np.array(self.Y_points)"""
 
     def __generate_regression(self):
         self.pipeline = make_pipeline(PolynomialFeatures(self.degree), LinearRegression())
@@ -78,3 +92,6 @@ class Regression(object):
     
     def generate(self):
         self.__generate_regression()
+
+    def set_csv_directory(self, dir):
+        self.csv_dir = dir

@@ -25,6 +25,8 @@ It is important to override the timbre method, with a periodic wave using the
 parameters. Also, you can specify the quarter note duration in miliseconds when you create the instrument.
 
 ```python
+from crafters.instrument import AbstractInstrument
+
 class Instrument(AbstractInstrument):
 
     def __init__(self, melody, **kwargs):
@@ -49,6 +51,6 @@ j = Instrument(melody, quarter_note_duration=1000)
 i.build_melody("my_slow_melody")
 ```
 
-For more info, see the example.py file
+For more info, see the example.py file inside examples folder
 
 Enjoy.

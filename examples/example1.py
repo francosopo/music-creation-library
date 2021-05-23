@@ -1,4 +1,3 @@
-from crafters.regression import Regression
 from crafters.scale import TraditionalScale
 from crafters.instrument import AbstractInstrument
 from crafters.melody import Melody
@@ -28,23 +27,8 @@ for i in range(12):
     melody.use_note(i,2) #(note index , duration)
 
 i = Instrument(melody)
-root_directory = pathlib.Path(__file__).parent.parent.absolute()
+root_directory = pathlib.Path(__file__).parent.parent.absolute() #set the render directory as you want
 render_directory = os.path.join(root_directory, "creations")
 
 i.set_render_directory(render_directory)
 i.build_melody("melodia1")
-
-"""class Instrument3(AbstractInstrument):
-
-    def __init__(self, melody, **kwargs):
-        super().__init__(melody,**kwargs)
-        self.regression = Regression(degree=8)
-        self.regression.load_csv("second_timbre")
-        self.regression.generate()
-    
-    def timbre(self, note, armonic_number, time):
-        return self.regression.use(2 * math.pi * note * armonic_number * time)
-
-k = Instrument3(melody)
-k.build_melody("melodia3")
-"""

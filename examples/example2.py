@@ -22,5 +22,5 @@ scale = TraditionalScale(12)
 melody = Melody(scale)
 
 j = Instrument2(melody, quarter_note_duration=250)
-j.set_render_directory(render_directory)
+j.set_render_directory(render_directory) #same render directory as example 1
 j.build_melody("melodia2")
