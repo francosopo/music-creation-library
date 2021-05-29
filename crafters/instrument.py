@@ -51,7 +51,7 @@ class AbstractInstrument(object):
         compname = "not compressed"
         wav_file.setparams((n_channels, sampwidth,self.sample_rate, n_frames, comptype, compname))
         for sample in self.__compiled_melody:
-            wav_file.writeframes(struct.pack('h', int(sample * 16382)))
+            wav_file.writeframes(struct.pack('h', int(sample  * 16382)))
         wav_file.close()
 
 

@@ -1,20 +1,18 @@
 import unittest as testing
 
-from tests.instruments import InstrumentSineWave
+from tests.instruments import *
 from tests.abstract_tests import TestAbstractInstrument
 
-
-class TestBasicTest(TestAbstractInstrument):
-
+class TestBezierCurve(TestAbstractInstrument):
     def setup(self):
         super().setUp()
-        super().set_instrument(InstrumentSineWave(self.melody))
-        super().set_melody_name("melodia1")
+        super().set_instrument(InstrumentBezierCurve(self.melody))
+        super().set_melody_name("melodia4")
 
-    def test_instrument(self):
+    def test_regression(self):
         self.setup()
         super().build()
         self.assertTrue(f"{self.melody_name}.wav" in self.rendered_melodies)
-        
-if __name__ == "__main__":
+
+if __name__=="__main__":
     testing.main()

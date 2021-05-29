@@ -1,12 +1,15 @@
 import random as rnd
 import numpy as np 
-import pathlib, os, csv
+import pathlib, os, csv, abc
 
 from math import floor, pi, trunc
 from time import time
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.pipeline import make_pipeline
 from sklearn.linear_model import LinearRegression
+
+from bezier import Curve
+
 
 def truncate(number, decimals=0):
     """
@@ -21,16 +24,22 @@ def truncate(number, decimals=0):
 
     factor = 10.0 ** decimals
     return trunc(number * factor) / factor
-    
 
-class Regression(object):
-    
-    def __init__(self,degree=4, period = 2*pi):
-        super().__init__()
+class CsvCrafter(object):
+
+    def __init__(self, degree):
         self.X_points = []
         self.Y_points = []
         self.degree = degree
-        self.period = period
+        self.period = 1
+
+    @abc.abstractmethod
+    def use(self, x, trunc_decimal = 2):
+        pass
+
+    @abc.abstractmethod
+    def generate(self):
+        pass
 
     def __generate_random(self, seed, num_max_points):
         rnd.seed(seed)
@@ -40,7 +49,10 @@ class Regression(object):
             self.Y_points.append(rnd.random())
         self.X_points = np.array(self.X_points)
         self.Y_points = np.array(self.Y_points)
-    
+
+    def generate_randomly(self, seed=time(), num_max_points = 8):
+        self.__generate_random(seed,num_max_points)
+
     def save_csv(self, name):
         if not os.path.exists(os.path.join(self.csv_dir)):
             os.mkdir(os.path.join(self.csv_dir))
@@ -49,7 +61,7 @@ class Regression(object):
         for i in range(len(self.X_points)):
             f.write(f"{self.X_points[i]}, {self.Y_points[i]}\n")
         f.close()
-
+    
     def load_csv(self, name, column_names=False):
         with open(os.path.join(self.csv_dir, f"{name}.csv"), 'r') as csv_file:
             csv_reader = csv.reader(csv_file,delimiter=',')
@@ -65,33 +77,45 @@ class Regression(object):
                     self.Y_points.append(float(row[1]))
         self.X_points = np.array(self.X_points)
         self.Y_points = np.array(self.Y_points)
+        self.period = self.X_points[len(self.X_points)-1]
 
-        """dir = os.path.join(self.csv_dir,name)
-        f = open(f"{dir}.csv", "r",encoding="utf-8")
-        line = f.readline()
-        while line != "":
-            line = line.replace("\\n","")
-            data = line.split(",")
-            print(data)
-            self.X_points.append(data[0])
-            self.Y_points.append(data[1])
-            line = f.readline()
-        self.X_points = np.array(self.X_points)
-        self.Y_points = np.array(self.Y_points)"""
+    def set_csv_directory(self, dir):
+        self.csv_dir = dir
+    
+    def scale(self, x):
+        return x-floor(x/self.period)*self.period
+
+
+
+class Regression(CsvCrafter):
+    
+    def __init__(self,degree=4):
+        super().__init__(degree)
 
     def __generate_regression(self):
         self.pipeline = make_pipeline(PolynomialFeatures(self.degree), LinearRegression())
         self.pipeline.fit(self.X_points.reshape(-1,1), self.Y_points.reshape(-1,1))
+        self.period = max(self.X_points)
         
     def use(self, x, trunc_decimal=2):
-        return truncate(self.pipeline.predict(np.array([[x-floor(x)]]))[0][0], trunc_decimal)
-
-    def generate_randomly(self, seed=time(), num_max_points = 8):
-        self.__generate_random(seed,num_max_points)
-        self.__generate_regression()
+        return truncate(self.pipeline.predict(np.array([[self.scale(x)]]))[0][0], trunc_decimal)
     
     def generate(self):
         self.__generate_regression()
 
-    def set_csv_directory(self, dir):
-        self.csv_dir = dir
+    
+class BezierCurve(CsvCrafter):
+
+    def __init__(self):
+        super().__init__(0)
+
+    def generate(self):
+        self.nodes = np.asfortranarray([self.X_points, self.Y_points])
+        self.degree = len(self.Y_points) - 1
+        self.curve = Curve(self.nodes,degree = self.degree)
+
+    def normalize(self, x):
+        return x/max(self.X_points) - floor(x/max(self.X_points))
+
+    def use(self, x, trunc_decimal=2):
+        return self.curve.evaluate(self.normalize(x))[1][0]
