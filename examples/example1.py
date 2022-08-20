@@ -4,7 +4,7 @@ from crafters.melody import Melody
 
 import pathlib, os, math
 
-# Start creating a scale class
+# Start creating a scale class and override the method 'define scale'
 # Then, create a melody class using the scale you created
 # Create an instrument class and override timbre method
 # and then, build the melody and play it with the player 

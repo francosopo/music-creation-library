@@ -8,8 +8,6 @@ from sklearn.preprocessing import PolynomialFeatures
 from sklearn.pipeline import make_pipeline
 from sklearn.linear_model import LinearRegression
 
-from bezier import Curve
-
 
 def truncate(number, decimals=0):
     """
@@ -103,19 +101,3 @@ class Regression(CsvCrafter):
     def generate(self):
         self.__generate_regression()
 
-    
-class BezierCurve(CsvCrafter):
-
-    def __init__(self):
-        super().__init__(0)
-
-    def generate(self):
-        self.nodes = np.asfortranarray([self.X_points, self.Y_points])
-        self.degree = len(self.Y_points) - 1
-        self.curve = Curve(self.nodes,degree = self.degree)
-
-    def normalize(self, x):
-        return x/max(self.X_points) - floor(x/max(self.X_points))
-
-    def use(self, x, trunc_decimal=2):
-        return self.curve.evaluate(self.normalize(x))[1][0]
